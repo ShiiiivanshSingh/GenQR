@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - GenQR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="about.css">
+</head>
+<body>
+    <!-- Replace the existing navigation section with just this -->
+    <button class="menu-button" id="menuButton">
+        <div class="hamburger-lines">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </div>
+    </button>
+
+    <nav class="nav-menu" id="navMenu">
+        <div class="nav-item">
+            <a href="/" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/#generator" class="nav-link">
+                <i class="fas fa-qrcode"></i>
+                <span>Generator</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/about.html" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                <span>About</span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <button id="themeToggle" class="nav-link">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Hero Section -->
+    <section class="about-hero section-full">
+        <h1 class="hero-title fade-in">QR Code Generation, Made Effortless</h1>
+        <p class="hero-subtitle fade-in">A minimal, fast, and easy-to-use QR generator.</p>
+        <div class="scroll-indicator fade-in">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Personal Touch Section -->
+    <section class="about-section section-full">
+        <div class="section-container">
+            <div class="section-content fade-in">
+                <h2>Hey there! 👋</h2>
+                <p>I'm Shivansh Pratap Singh, a developer from India who believes great tools should be simple and accessible. I built this project with a simple goal: creating a QR generator that just works—no ads, no complications, just clean and instant QR codes.</p>
+                
+                <div class="values-grid">
+                    <div class="value-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Instant</h3>
+                        <p>Your QR code appears as you type</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-lock"></i>
+                        <h3>Private</h3>
+                        <p>No data storage, everything stays local</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator fade-in">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Connect Section -->
+    <section class="connect-section section-full">
+        <div class="section-container">
+            <h2 class="text-center fade-in">Let's Connect</h2>
+            <div class="social-links fade-in">
+                <a href="https://github.com/ShiiiivanshSingh" class="social-link" target="_blank">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+                <a href="https://www.linkedin.com/in/shivansh-pratap-singh-23b3b92b1" class="social-link" target="_blank">
+                    <i class="fab fa-linkedin"></i>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="https://x.com/de_mirage_fan" class="social-link" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                    <span>Twitter</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add this at the beginning of your script
+        // Force scroll to top on page reload
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
+
+        // Alternative method using history scrollRestoration
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+
+        // Theme handling
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const themeIcon = themeToggle.querySelector('i');
+
+        function updateThemeIcon(isDark) {
+            themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            const themeText = themeToggle.querySelector('span');
+            if (themeText) {
+                themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            }
+        }
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                updateThemeIcon(true);
+            } else {
+                html.removeAttribute('data-theme');
+                updateThemeIcon(false);
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(isDark ? 'light' : 'dark');
+        }
+
+        // Load saved theme or set default dark theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            setTheme('dark'); // Set default dark theme
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Menu functionality
+        const menuButton = document.getElementById('menuButton');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        function toggleMenu() {
+            menuButton.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMenu() {
+            menuButton.classList.remove('active');
+            navMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        menuButton.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+
+        // Close menu when clicking a nav link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close menu when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        // Prevent scrolling when menu is open
+        document.addEventListener('touchmove', (e) => {
+            if (navMenu.classList.contains('active')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Smooth scroll functionality
+        document.querySelectorAll('.scroll-indicator').forEach(indicator => {
+            indicator.addEventListener('click', function(e) {
+                e.preventDefault();
+                const currentSection = this.closest('.section-full');
+                const nextSection = currentSection.nextElementSibling;
+                
+                if (nextSection) {
+                    nextSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Optional: Hide scroll indicator on last section
+        const sections = document.querySelectorAll('.section-full');
+        const lastSection = sections[sections.length - 1];
+        if (lastSection) {
+            const lastScrollIndicator = lastSection.querySelector('.scroll-indicator');
+            if (lastScrollIndicator) {
+                lastScrollIndicator.style.display = 'none';
+            }
+        }
+
+        // Optional: Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const currentSection = [...document.querySelectorAll('.section-full')].find(section => {
+                    const rect = section.getBoundingClientRect();
+                    return rect.top >= -100 && rect.top <= 100;
+                });
+                
+                if (currentSection) {
+                    const targetSection = e.key === 'ArrowDown' 
+                        ? currentSection.nextElementSibling 
+                        : currentSection.previousElementSibling;
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

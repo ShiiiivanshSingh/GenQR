@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenQR - Beautiful QR Code Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Remove existing nav section and replace with this -->
+    <button class="menu-button" id="menuButton">
+        <div class="hamburger-lines">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </div>
+    </button>
+
+    <nav class="nav-menu" id="navMenu">
+        <div class="nav-item">
+            <a href="/" class="nav-link">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/#generator" class="nav-link">
+                <i class="fas fa-qrcode"></i>
+                Generator
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/about.html" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+        </div>
+        <div class="nav-item">
+            <button id="themeToggle" class="nav-link">
+                <i class="fas fa-moon"></i>
+                <span>Dark Mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <!-- Full Screen Welcome -->
+    <section class="welcome-screen">
+        <div class="welcome-content">
+            <h1 class="welcome-title fade-in">Generate QR Codes,<br>Instantly & Effortlessly</h1>
+            <p class="welcome-subtitle fade-in">A sleek, modern, and easy-to-use QR generator</p>
+            <button class="start-button fade-in" id="startButton">
+                Start Generating
+                <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Generator Section -->
+    <section class="generator-section" id="generator">
+        <div class="generator-container">
+            <div class="input-section">
+                <div class="input-group">
+                    <input type="text" id="qrInput" class="text-input" 
+                           placeholder="Enter URL or text to generate QR code">
+                </div>
+
+                <div class="customization-options">
+                    <div class="color-options">
+                        <div class="color-option">
+                            <label class="input-label" for="qrColor">QR Color</label>
+                            <input type="color" id="qrColor" class="color-picker" value="#000000">
+                        </div>
+                        <div class="color-option">
+                            <label class="input-label" for="bgColor">Background</label>
+                            <input type="color" id="bgColor" class="color-picker" value="#FFFFFF">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div id="qrOutput" class="qr-preview">
+                    <!-- QR code will be generated here -->
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="generateBtn" class="action-button primary">
+                        <i class="fas fa-sync-alt"></i> Generate
+                    </button>
+                    <button id="downloadBtn" class="action-button secondary">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                   
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>GenQR</h3>
+                <p>Simple, fast, and beautiful QR code generation</p>
+            </div>
+         
+            <div class="footer-section">
+                <h4>Contact Us:</h4>
+                <a href="https://github.com/ShiiiivanshSingh/GenQR" target="_blank" class="footer-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="/about.html" class="footer-link">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>GenQR. Made with <i class="fas fa-heart"></i> By Shivansh!</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme handling
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const themeIcon = themeToggle.querySelector('i');
+
+        function updateThemeIcon(isDark) {
+            themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            const themeText = themeToggle.querySelector('span');
+            if (themeText) {
+                themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            }
+        }
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                updateThemeIcon(true);
+            } else {
+                html.removeAttribute('data-theme');
+                updateThemeIcon(false);
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        function toggleTheme() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            setTheme(isDark ? 'light' : 'dark');
+        }
+
+        // Load saved theme or set default dark theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            setTheme('dark'); // Set default dark theme
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Smooth scroll to generator
+        document.getElementById('startButton').addEventListener('click', () => {
+            document.getElementById('generator').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+
+        // Menu functionality
+        const menuButton = document.getElementById('menuButton');
+        const navMenu = document.getElementById('navMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        function toggleMenu() {
+            menuButton.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeMenu() {
+            menuButton.classList.remove('active');
+            navMenu.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        menuButton.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+
+        // Close menu when clicking a nav link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', closeMenu);
+        });
+
+        // Close menu when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        // Prevent scrolling when menu is open
+        document.addEventListener('touchmove', (e) => {
+            if (navMenu.classList.contains('active')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // QR Code generation
+        const qrInput = document.getElementById('qrInput');
+        const qrColor = document.getElementById('qrColor');
+        const bgColor = document.getElementById('bgColor');
+        const generateBtn = document.getElementById('generateBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const qrOutput = document.getElementById('qrOutput');
+
+        // Real-time QR code generation
+        let typingTimer;
+        qrInput.addEventListener('input', () => {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(generateQRCode, 500);
+        });
+
+        function generateQRCode() {
+            qrOutput.innerHTML = '';
+            if (qrInput.value) {
+                new QRCode(qrOutput, {
+                    text: qrInput.value,
+                    width: 256,
+                    height: 256,
+                    colorDark: qrColor.value,
+                    colorLight: bgColor.value,
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                downloadBtn.disabled = false; // Enable download button when QR is generated
+            } else {
+                downloadBtn.disabled = true; // Disable download button when no QR code
+            }
+        }
+
+        // Download QR Code functionality
+        downloadBtn.addEventListener('click', () => {
+            const qrImage = qrOutput.querySelector('img');
+            if (qrImage) {
+                // Create a temporary link
+                const link = document.createElement('a');
+                link.href = qrImage.src;
+                
+                // Generate filename from input or use default
+                const filename = qrInput.value
+                    ? `qr-${qrInput.value.substring(0, 20).replace(/[^a-z0-9]/gi, '-')}.png`
+                    : 'qr-code.png';
+                
+                link.download = filename;
+                
+                // Trigger download
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+
+        // Color picker events
+        [qrColor, bgColor].forEach(picker => {
+            picker.addEventListener('input', generateQRCode);
+        });
+
+        // Generate button click
+        generateBtn.addEventListener('click', generateQRCode);
+    </script>
+</body>
+</html> 
