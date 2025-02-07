@@ -13,6 +13,7 @@
   --surface: #ffffff;
   --border: #e2e8f0;
   --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --favicon-color: #000000;
 }
 
 [data-theme="dark"] {
@@ -27,6 +28,7 @@
   --surface: #1e293b;
   --border: #334155;
   --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+  --favicon-color: #ffffff;
 }
 
 * {
