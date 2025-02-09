@@ -19,7 +19,7 @@ A minimal, fast, and beautiful QR code generator. No ads, no complications—jus
 <h1 align="center">Screenshots 📸</h1>
 
 ![image](https://github.com/user-attachments/assets/f2880293-fd67-41d1-a529-b045a62fc111)
-![image](https://github.com/user-attachments/assets/85b4cf90-69b6-46d9-b683-8af33c457cde)
+![image](https://github.com/user-attachments/assets/54066a38-b885-4418-b4c8-a39c165e4492)
 
 
 ## Why GenQR? 🤔
