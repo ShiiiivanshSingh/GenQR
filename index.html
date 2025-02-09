@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Remove existing nav section and replace with this -->
+<!--  Welcome to my code fellow stalker jhope u find this interesting -->
     <button class="menu-button" id="menuButton">
         <div class="hamburger-lines">
             <span class="hamburger-line"></span>
@@ -49,7 +49,7 @@
 
     <div class="menu-overlay" id="menuOverlay"></div>
 
-    <!-- Full Screen Welcome -->
+    <!-- yeh rha Welcome -->
     <section class="welcome-screen">
         <div class="welcome-content">
             <h1 class="welcome-title fade-in">Generate QR Codes,<br>Instantly & Effortlessly</h1>
@@ -61,7 +61,7 @@
         </div>
     </section>
 
-    <!-- Generator Section -->
+
     <section class="generator-section" id="generator">
         <div class="generator-container">
             <div class="input-section">
@@ -86,7 +86,7 @@
 
             <div class="preview-section">
                 <div id="qrOutput" class="qr-preview">
-                    <!-- QR code will be generated here -->
+                    <!-- QR code yha generate hoga -->
                 </div>
                 
                 <div class="action-buttons">
@@ -102,7 +102,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+ 
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -126,7 +126,7 @@
     </footer>
 
     <script>
-        // Theme handling
+        
         const themeToggle = document.getElementById('themeToggle');
         const html = document.documentElement;
         const themeIcon = themeToggle.querySelector('i');
@@ -155,17 +155,17 @@
             setTheme(isDark ? 'light' : 'dark');
         }
 
-        // Load saved theme or set default dark theme
+      
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             setTheme(savedTheme);
         } else {
-            setTheme('dark'); // Set default dark theme
+            setTheme('dark'); // default dark theme coz it looks better (spongemebob my eyes meme)
         }
 
         themeToggle.addEventListener('click', toggleTheme);
 
-        // Smooth scroll to generator
+        // Smooth scroll lessssss gooooooooooo
         document.getElementById('startButton').addEventListener('click', () => {
             document.getElementById('generator').scrollIntoView({ 
                 behavior: 'smooth',
@@ -173,7 +173,7 @@
             });
         });
 
-        // Menu functionality
+        // Menu button idhar kaam krega dont change its buggy :(
         const menuButton = document.getElementById('menuButton');
         const navMenu = document.getElementById('navMenu');
         const menuOverlay = document.getElementById('menuOverlay');
@@ -194,27 +194,25 @@
 
         menuButton.addEventListener('click', toggleMenu);
         menuOverlay.addEventListener('click', closeMenu);
-
-        // Close menu when clicking a nav link
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', closeMenu);
         });
 
-        // Close menu when pressing Escape key
+        // Close menu when pressing Escape key lessss goooooooooooooo
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeMenu();
             }
         });
 
-        // Prevent scrolling when menu is open
+        // cant scroll when menuu is OPEN!
         document.addEventListener('touchmove', (e) => {
             if (navMenu.classList.contains('active')) {
                 e.preventDefault();
             }
         }, { passive: false });
 
-        // QR Code generation
+        // QR Code generation related code, dont change it pls
         const qrInput = document.getElementById('qrInput');
         const qrColor = document.getElementById('qrColor');
         const bgColor = document.getElementById('bgColor');
@@ -222,7 +220,8 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const qrOutput = document.getElementById('qrOutput');
 
-        // Real-time QR code generation
+
+        // Real-time QR code generation related code, again dont change it pls
         let typingTimer;
         qrInput.addEventListener('input', () => {
             clearTimeout(typingTimer);
@@ -232,48 +231,69 @@
         function generateQRCode() {
             qrOutput.innerHTML = '';
             if (qrInput.value) {
+                // Update QR output background color
+                qrOutput.style.backgroundColor = bgColor.value;
+                
                 new QRCode(qrOutput, {
                     text: qrInput.value,
-                    width: 256,
-                    height: 256,
+                    width: 458,
+                    height: 458,
                     colorDark: qrColor.value,
                     colorLight: bgColor.value,
                     correctLevel: QRCode.CorrectLevel.H
                 });
-                downloadBtn.disabled = false; // Enable download button when QR is generated
+                downloadBtn.disabled = false;
             } else {
-                downloadBtn.disabled = true; // Disable download button when no QR code
+                downloadBtn.disabled = true;
             }
         }
 
-        // Download QR Code functionality
+      
         downloadBtn.addEventListener('click', () => {
             const qrImage = qrOutput.querySelector('img');
             if (qrImage) {
-                // Create a temporary link
-                const link = document.createElement('a');
-                link.href = qrImage.src;
+                // Create a canvas element woah cool shie i guess
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = qrImage.width;
+                canvas.height = qrImage.height;
                 
-                // Generate filename from input or use default
-                const filename = qrInput.value
-                    ? `qr-${qrInput.value.substring(0, 20).replace(/[^a-z0-9]/gi, '-')}.png`
-                    : 'qr-code.png';
+                // Draw img
+                ctx.fillStyle = bgColor.value;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(qrImage, 0, 0);
                 
-                link.download = filename;
+
+                const now = new Date();
+                const date = now.toISOString().split('T')[0];
+                const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
                 
-                // Trigger download
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+               
+                canvas.toBlob((blob) => {
+                 
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+               
+                    const filename = `qr-${date}-${time}.png`;
+                    
+                    link.download = filename;
+                    
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                 
+                    URL.revokeObjectURL(url);
+                }, 'image/png');
             }
         });
 
-        // Color picker events
+
         [qrColor, bgColor].forEach(picker => {
             picker.addEventListener('input', generateQRCode);
         });
 
-        // Generate button click
         generateBtn.addEventListener('click', generateQRCode);
     </script>
 </body>
