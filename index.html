@@ -264,43 +264,45 @@
         downloadBtn.addEventListener('click', () => {
             const qrImage = qrOutput.querySelector('img');
             if (qrImage) {
-                // Create a canvas element woah cool shie i guess
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
-                canvas.width = qrImage.width;
-                canvas.height = qrImage.height;
-                
-                // Draw img
-                ctx.fillStyle = bgColor.value;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(qrImage, 0, 0);
-                
-
-                const now = new Date();
-                const date = now.toISOString().split('T')[0];
-                const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
-                
-               
-                canvas.toBlob((blob) => {
-                 
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.href = url;
-               
-                    const filename = `qr-${date}-${time}.png`;
-                    
-                    link.download = filename;
-                    
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                 
-                    URL.revokeObjectURL(url);
-                }, 'image/png');
+                // Wait for the image to be fully loaded
+                if (!qrImage.complete) {
+                    qrImage.addEventListener('load', () => downloadQR(qrImage));
+                } else {
+                    downloadQR(qrImage);
+                }
             }
         });
 
+        function downloadQR(qrImage) {
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set canvas dimensions to match QR code
+            canvas.width = qrImage.naturalWidth;
+            canvas.height = qrImage.naturalHeight;
+            
+            // Fill background
+            ctx.fillStyle = bgColor.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw QR code
+            ctx.drawImage(qrImage, 0, 0);
+            
+            // Generate timestamp for filename
+            const now = new Date();
+            const date = now.toISOString().split('T')[0];
+            const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+            const filename = `qr-${date}-${time}.png`;
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         [qrColor, bgColor].forEach(picker => {
             picker.addEventListener('input', generateQRCode);
