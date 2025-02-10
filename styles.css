@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Light theme */
+  /* Light theme check it outtt  https://www.youtube.com/watch?v=rTTHj0Mqf7I*/
   --primary: #2b2d42;
   --secondary: #8d99ae;
   --background: #f8fafc;
@@ -17,7 +17,7 @@
 }
 
 [data-theme="dark"] {
-  /* Dark theme */
+  /* Dark theme yo check it outtt  https://www.youtube.com/watch?v=rTTHj0Mqf7I */
   --primary: #f8fafc;
   --secondary: #94a3b8;
   --background: #0f172a;

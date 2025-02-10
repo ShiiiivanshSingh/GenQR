@@ -231,13 +231,15 @@
         function generateQRCode() {
             qrOutput.innerHTML = '';
             if (qrInput.value) {
-                // Update QR output background color
                 qrOutput.style.backgroundColor = bgColor.value;
+                
+                const containerWidth = qrOutput.offsetWidth;
+                const qrSize = Math.min(containerWidth, 458);
                 
                 new QRCode(qrOutput, {
                     text: qrInput.value,
-                    width: 458,
-                    height: 458,
+                    width: qrSize,
+                    height: qrSize,
                     colorDark: qrColor.value,
                     colorLight: bgColor.value,
                     correctLevel: QRCode.CorrectLevel.H
@@ -247,6 +249,16 @@
                 downloadBtn.disabled = true;
             }
         }
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (qrInput.value) {
+                    generateQRCode();
+                }
+            }, 250);
+        });
 
       
         downloadBtn.addEventListener('click', () => {
